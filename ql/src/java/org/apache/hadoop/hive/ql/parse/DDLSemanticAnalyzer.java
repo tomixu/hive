@@ -734,7 +734,21 @@ public class DDLSemanticAnalyzer extends BaseSemanticAnalyzer {
     // configured not to fail silently
     boolean throwException =
         !ifExists && !HiveConf.getBoolVar(conf, ConfVars.DROPIGNORESNONEXISTENT);
-    Table tab = getTable(tableName, throwException);
+    // Add by ericshan@vipshop, to fix the drop table bug
+	String tableName2 = "";
+	if (tableName.contains(".")) {
+		try {
+			tableName2 = tableName.split("\\.")[1];
+		} catch (Exception e) {
+			tableName2 = tableName;
+	    }
+	} else {
+		tableName2 = tableName;
+	}
+    Table tab = getTable(tableName2, throwException);
+    // end by ericshan
+
+    //Table tab = getTable(tableName, throwException);
     if (tab != null) {
       inputs.add(new ReadEntity(tab));
       outputs.add(new WriteEntity(tab));

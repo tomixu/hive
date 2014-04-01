@@ -469,6 +469,7 @@ public class MapOperator extends Operator<MapredWork> implements Serializable, C
 
     Path fpath = new Path(HiveConf.getVar(hconf,
         HiveConf.ConfVars.HADOOPMAPFILENAME));
+	boolean schemeless = fpath.toUri().getScheme() == null;
 
     ArrayList<Operator<? extends OperatorDesc>> children =
       new ArrayList<Operator<? extends OperatorDesc>>();
@@ -481,6 +482,9 @@ public class MapOperator extends Operator<MapredWork> implements Serializable, C
       for (String onefile : conf.getPathToAliases().keySet()) {
         MapOpCtx opCtx = initObjectInspector(conf, hconf, onefile, convertedOI);
         Path onepath = new Path(onefile);
+        if (schemeless) {
+          onepath = new Path(onepath.toUri().getPath());
+        }
         List<String> aliases = conf.getPathToAliases().get(onefile);
 
         for (String onealias : aliases) {
