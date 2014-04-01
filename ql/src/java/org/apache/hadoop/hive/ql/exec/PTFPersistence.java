@@ -432,18 +432,18 @@ public class PTFPersistence {
       PTFPersistence.lock(lock.writeLock());
       currentSize = 0;
       try {
-        #currentSize = 0;
-        #for(int i=0; i < partitions.size() - 1; i++) {
-        #  PersistentByteBasedList p = (PersistentByteBasedList)
-        #                  partitions.remove(0);
-        #  reusableFiles.add(p.getFile());
-        #  partitionOffsets.remove(0);
+        //currentSize = 0;
+        //for(int i=0; i < partitions.size() - 1; i++) {
+        //  PersistentByteBasedList p = (PersistentByteBasedList)
+        //                  partitions.remove(0);
+        //  reusableFiles.add(p.getFile());
+        //  partitionOffsets.remove(0);
         for (int i = 0; i < partitions.size() - 1; i++) { 
 	  ByteBasedList p = partitions.get(i);
 	  reusableFiles.add(((PersistentByteBasedList)p).getFile()); 
         }
-        #partitions.get(0).reset(0);
-        #partitionOffsets.set(0, currentSize);
+        //partitions.get(0).reset(0);
+        //partitionOffsets.set(0, currentSize);
 	ByteBasedList memstore = partitions.get(partitions.size() - 1);
 	memstore.reset(0);
 
