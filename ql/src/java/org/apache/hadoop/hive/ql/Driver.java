@@ -128,6 +128,7 @@ public class Driver implements CommandProcessor {
   private String SQLState;
 
   // A limit on the number of threads that can be launched
+  // test for happy 2014-04-01
   private int maxthreads;
   private static final int SLEEP_TIME = 2000;
   protected int tryCount = Integer.MAX_VALUE;
