@@ -17,6 +17,7 @@
    limitations under the License.
 -->
 
+<!-- add for test -->
 
 <project name="hive" default="jar"
          xmlns:ivy="antlib:org.apache.ivy.ant"
