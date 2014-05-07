@@ -40,6 +40,7 @@ import org.apache.hadoop.mapreduce.task.JobContextImpl;
 import org.apache.hadoop.mapreduce.task.TaskAttemptContextImpl;
 import org.apache.hadoop.mapreduce.util.HostUtil;
 import org.apache.hadoop.util.Progressable;
+import org.apache.hadoop.mapreduce.MRJobConfig;
 
 /**
  * Implemention of shims against Hadoop 0.23.0.
@@ -80,7 +81,13 @@ public class Hadoop23Shims extends HadoopShimsSecure {
 
   @Override
   public org.apache.hadoop.mapreduce.TaskAttemptContext newTaskAttemptContext(Configuration conf, final Progressable progressable) {
-    return new TaskAttemptContextImpl(conf, new TaskAttemptID()) {
+    TaskAttemptID taskAttemptId = TaskAttemptID.forName(conf.get(MRJobConfig.TASK_ATTEMPT_ID));
+    if (taskAttemptId == null) {
+      // If the caller is not within a mapper/reducer (if reading from the table via CliDriver),
+      // then TaskAttemptID.forname() may return NULL. Fall back to using default constructor.
+      taskAttemptId = new TaskAttemptID();
+    }
+    return new TaskAttemptContextImpl(conf, taskAttemptId) {
       @Override
       public void progress() {
         progressable.progress();
